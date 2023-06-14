@@ -23,3 +23,11 @@ Then you can run the Nest.js API!
 # development
 $ npm run start:dev
 ```
+
+## To-do
+
+Things I should do (and plan to do) to make this better
+- [ ] Implement a consistent error handling system (be considerate of GraphQL conventions)
+- [ ] Use pino for logging
+- [ ] Setup environment variables
+- [ ] Setup a testing suite
