@@ -10,8 +10,16 @@ import * as passport from 'passport';
 import { REDIS } from 'modules/redis/redis.constants';
 import RedisStore from 'connect-redis';
 import { join } from 'path';
+import { GlobalExceptionFilter } from 'exception.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
   imports: [
     MikroOrmModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -19,6 +27,7 @@ import { join } from 'path';
       sortSchema: true,
       driver: ApolloDriver,
       playground: true,
+      includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
     }),
     UserModule,
     AuthModule,
@@ -26,7 +35,7 @@ import { join } from 'path';
   ],
 })
 export class AppModule implements NestModule {
-  constructor(@Inject(REDIS) private readonly redis) {}
+  constructor(@Inject(REDIS) private readonly redis) { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer

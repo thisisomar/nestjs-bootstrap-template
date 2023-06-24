@@ -5,12 +5,7 @@ import { EntityRepository, MikroORM } from '@mikro-orm/core';
 import { SignupUserInput } from './dto/user.dto';
 import { EntityManager } from '@mikro-orm/postgresql';
 import * as bcrypt from 'bcrypt';
-
-export class UserNotFoundError extends Error {
-  constructor() {
-    super('User not found');
-  }
-}
+import { UserNotFoundException } from 'exceptions/user-not-found.exception';
 
 @Injectable()
 export class UserService {
@@ -19,22 +14,24 @@ export class UserService {
     private readonly userRepository: EntityRepository<User>,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
-  ) {}
+  ) { }
 
   async createUser(signupInput: SignupUserInput): Promise<User> {
-    const newUser = this.userRepository.create(signupInput);
+    const newUser = await this.userRepository.create(signupInput);
     newUser.password = await bcrypt.hash(signupInput.password, 10);
 
     await this.em.persistAndFlush(newUser);
-  
+
     return newUser;
   };
 
   async findOneByEmail(email: string): Promise<User> {
-    const user = this.userRepository.findOne({ email });
+    const user = await this.userRepository.findOne({ email });
+
+    console.log(user)
 
     if (!user) {
-      throw new UserNotFoundError(); 
+      throw new UserNotFoundException();
     }
 
     return user;
