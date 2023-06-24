@@ -3,7 +3,7 @@ import { User } from 'modules/user/user.entity';
 import { LoginUserDto, SignUpUserInput } from './dto/auth.dto';
 import { UserService } from 'modules/user/user.service';
 import { ExecutionContext, UseGuards, createParamDecorator } from '@nestjs/common';
-import { GQLAuthGuard } from '../../shared/guards/gql-auth.guard';
+import { GQLAuthGuard } from './guards/gql-auth.guard';
 
 export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {

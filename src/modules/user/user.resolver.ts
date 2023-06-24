@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query } from '@nestjs/graphql';
-import { IsAuthenticated } from 'shared/guards/authenticated.guard';
+import { IsAuthenticated } from 'modules/auth/guards/authenticated.guard';
 
 @Resolver()
 export class UserResolver {
